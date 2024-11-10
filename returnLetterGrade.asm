@@ -10,7 +10,42 @@
 # invalid input handling
 
 .macro returnLetterGrade(%decimal)
+	li $t0, %decimal # i think this parts wrong its not loading in properly
+	li $a1, 90
+	bge $t0, $a1, gradeA #if score >= 90 its an A
+	
+	li $a1, 80
+	bge $t0, $a1, gradeB
+	
+	li $a1, 70
+	bge $t0, $a1, gradeC
+	
+	li $a1, 60
+	bge $t0, $a1, gradeD
+	
+	j gradeF
+		
 
+gradeA:
+	li $a0, 'A'
+	j displayGrade
+gradeB:
+	li $a0, 'B'
+	j displayGrade
+gradeC:
+	li $a0, 'C'
+	j displayGrade
+gradeD:
+	li $a0, 'D'
+	j displayGrade
+gradeF:
+	li $a0, 'F'
+	j displayGrade
+	
+displayGrade: 
+	li $v0, 11
+	move $a0, $a0
+	syscall
 .end_macro
 
 
@@ -34,8 +69,10 @@ main:
 	li $v0, 4
 	la $a0, enterSelection
 	syscall
+	move $s1, $v0
+	
 	#return score as a letter grade
-	#returnLetterGrade
+	returnLetterGrade(s1)
 	
 	#reenter score prompt
 	li $v0, 4
