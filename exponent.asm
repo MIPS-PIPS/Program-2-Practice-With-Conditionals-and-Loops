@@ -2,61 +2,69 @@
 # 11/9/2024
 # Program 2: Practice With Conditionals and Loops
 # Brandon Tseng, Michael Wu, Jonathan Dang
-# Github Repository
+# Github Repository: https://github.com/MIPS-PIPS/Program-2-Practice-With-Conditionals-and-Loops/tree/main
 
-# take two ints from user
-# find result of x to power of y
-# include main, looping, exit label
+# Take two ints from user
+# Find result of x to power of y
+# Include main, looping, exit label
 
 .data
-	prompt: .asciiz "This program asks the user to input a value for 'x' and 'y'.\nThen, it finds the value of x to the power of y.\nFor example, 2 to the power 3 is 8."
-	input1: .asciiz "Enter a number for 'x': "
-	input2: .asciiz "Enter a number for 'y': "
-	output: .asciiz "'x' to the power 'y' is: "
+	prompt: .asciiz "This program asks the user to input a value for 'x' and 'y'.\nThen, it finds the value of x to the power of y.\nFor example, 2 to the power 3 is 8.\n\n"
+	input1: .asciiz "\nEnter a number for 'x': "
+	input2: .asciiz "\nEnter a number for 'y': "
+	result: .asciiz "\n'x' to the power 'y' is: "
+	
 .text
 main:
-	#print prompt
+	# Print prompt
 	li $v0, 4
 	la $a0, prompt
 	syscall
 	
-	#ask for x
+	# Ask for x ($t0)
 	li $v0, 4
 	la $a0, input1
 	syscall
 	
-	#store x
+	# Store x ($t0)
 	li $v0, 5
 	syscall
 	move $t0, $v0
 	
-	#ask for y
+	# Ask for y ($t1)
 	li $v0, 4
 	la $a0, input2
 	syscall
 	
-	#store y
+	# Store y ($t1)
 	li $v0, 5
 	syscall
 	move $t1, $v0
 	
+	# Initialize result number
+	li $t2, 1 
 	
-	li $t2, 1 #initialize result
-	li $t3, 0 #initialize loop counter
+	# Initialize loop counter (equal to y)
+	move $t3, $t1
 	
-	#print output text
-	li $v0, 4
-	la $a0, output
-	syscall
-	#print outputted num
-	
-	
-
 loop:
+	# Loop to perform exponential operation
+	beqz $t3, exit
 	mul $t2, $t2, $t0
-	addi $t3, $t3, 1
-	beq $t2, $t1, exit
+	subi $t3, $t3, 1
 	j loop
+	
 exit:
+	# Print result text
+	li $v0, 4
+	la $a0, result
+	syscall
+	
+	# Print result number
+	li $v0, 1
+	move $a0, $t2
+	syscall
+
+	# Quit program
 	li $v0, 10
 	syscall
